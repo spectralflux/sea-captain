@@ -9,16 +9,13 @@
     "node": ">=8.9.0"
   },
   "dependencies": {
-    "@tensorflow/tfjs": "^1.5.2",
-    "@tensorflow/tfjs-core": "^1.5.2",
-    "@tensorflow/tfjs-data": "^1.5.2",
-    "seedrandom": "^2.4.4",
-    "vega-embed": "^3.0.0"
-  },
-  "scripts": {
-    "watch": "cross-env NODE_ENV=development parcel index.html --no-hmr --open",
-    "build": "cross-env NODE_ENV=production parcel build index.html  --no-minify --public-url ./",
-    "link-local": "yalc link"
+    "@tensorflow-models/mobilenet": "^2.0.4",
+    "@tensorflow/tfjs": "1.2.11",
+    "@tensorflow/tfjs-converter": "1.2.11",
+    "@tensorflow/tfjs-core": "1.2.11",
+    "@tensorflow/tfjs-data": "1.2.11",
+    "@tensorflow-models/knn-classifier": "1.2.2",
+    "seedrandom": "^2.4.4"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-0",
@@ -28,5 +25,11 @@
     "cross-env": "^5.1.6",
     "parcel-bundler": "~1.10.3",
     "yalc": "~1.0.0-pre.22"
-  }
+  },
+  "browserslist": [
+    "> 1%",
+    "ie >= 11",
+    "ios >= 10",
+    "android >= 6"
+  ]
 }
