@@ -1,6 +1,8 @@
 import * as tf from '@tensorflow/tfjs';
 import * as mobilenet from '@tensorflow-models/mobilenet';
 import * as knnClassifier from '@tensorflow-models/knn-classifier';
+import Phaser from 'phaser';
+import gameConfig from './game/gameConfig.js';
 
 let net;
 const classifier = knnClassifier.create();

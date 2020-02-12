@@ -15,7 +15,8 @@
     "@tensorflow/tfjs-core": "1.2.11",
     "@tensorflow/tfjs-data": "1.2.11",
     "@tensorflow-models/knn-classifier": "1.2.2",
-    "seedrandom": "^2.4.4"
+    "seedrandom": "^2.4.4",
+    "phaser": "^3.20.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-0",
