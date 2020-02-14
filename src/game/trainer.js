@@ -5,22 +5,28 @@ import * as knnClassifier from '@tensorflow-models/knn-classifier';
 var net;
 var classifier;
 var webcamElement;
+var isDoneTraining;
+var isDoneAddingToModel;
+var webcam;
 
 export default {
-    trainModel: async function () {
-        let isDoneTraining = false;
-        classifier = knnClassifier.create();
+    initWebCam: async function() {
         webcamElement = document.getElementById('webcam');
+        // Create an object from Tensorflow.js data API which could capture image
+        // from the web camera as Tensor.
+        webcam = await tf.data.webcam(webcamElement);
+    },
 
+    trainModel: async function () {
+        isDoneTraining = false;
+        isDoneAddingToModel = false;
+        classifier = knnClassifier.create();
+    
         console.log('Loading mobilenet..');
 
         // Load the model.
         net = await mobilenet.load();
         console.log('Successfully loaded model');
-
-        // Create an object from Tensorflow.js data API which could capture image
-        // from the web camera as Tensor.
-        const webcam = await tf.data.webcam(webcamElement);
 
         // Reads an image from the webcam and associates it with a specific class
         // index.
@@ -43,10 +49,10 @@ export default {
         // When clicking a button, add an example for that class.
         document.getElementById('class-port').addEventListener('click', () => addExample(0));
         document.getElementById('class-starboard').addEventListener('click', () => addExample(1));
-        document.getElementById('class-done-training').addEventListener('click', () => isDoneTraining = true);
+        document.getElementById('class-done-training').addEventListener('click', () => isDoneAddingToModel = true);
 
 
-        while (!isDoneTraining) {
+        while (!isDoneAddingToModel) {
             if (classifier.getNumClasses() > 0) {
                 const img = await webcam.capture();
 
@@ -69,9 +75,22 @@ export default {
         }
 
         console.log("training complete");
+        isDoneTraining = true;
     },
 
-    get_prediction: function() {
-        return classifier.predictClass(activation);
+    getPrediction: async function() {
+        console.log("attempting prediction...");
+        if (webcam !== 'undefined' && webcam !== null) {
+            const img = await webcam.capture();
+            const activation = net.infer(img, 'conv_preds');
+            var prediction = classifier.predictClass(activation);
+            console.log(prediction);
+            return prediction;
+        }
+    },
+
+    isDoneTraining: function() {
+        return isDoneTraining;
     }
+
 }

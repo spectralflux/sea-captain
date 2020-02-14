@@ -3,6 +3,7 @@ import trainer from './trainer';
 
 var isGameOver;
 var score;
+var boat;
 
 export default {
     key: 'play',
@@ -10,7 +11,6 @@ export default {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 300 },
             debug: false
         }
     },
@@ -21,14 +21,27 @@ export default {
     },
 
     create: function () {
-        this.add.image(400, 300, 'boat');
         trainer.trainModel();
+
+        boat = this.physics.add.sprite(400, 450, 'boat').setSize(16, 48);
+        boat.setCollideWorldBounds(true);
     },
 
     update: function () {
         if (isGameOver) {
             this.scene.stop().run('end');
             return;
+        }
+
+        if (trainer.isDoneTraining()) {
+            trainer.getPrediction().then(function(prediction) {
+                console.log("prediction: ", prediction)
+                if(prediction.label === "0") {
+                    boat.setVelocityX(-20);
+                } else if(prediction.label === "1") {
+                    boat.setVelocityX(20);
+                }
+            });
         }
     }
 };

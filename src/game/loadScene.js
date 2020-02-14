@@ -1,3 +1,5 @@
+import trainer from './trainer';
+
 export default {
 
   key: 'boot',
@@ -11,6 +13,8 @@ export default {
     this.load.on('progress', function (progress) {
       bar.setScale(progress, 1);
     });
+
+    trainer.initWebCam();
   },
 
   create: function () {
