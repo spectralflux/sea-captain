@@ -9,6 +9,7 @@ export default {
     var bar = this.add.rectangle(bg.x, bg.y, bg.width, bg.height, 0xffffff).setScale(0, 1);
 
     this.load.image('boat', require('../assets/boat.png'));
+    this.load.image('bigrock', require('../assets/bigrock.png'));
 
     this.load.on('progress', function (progress) {
       bar.setScale(progress, 1);
@@ -18,7 +19,7 @@ export default {
   },
 
   create: function () {
-  
+
   },
 
   update: function () {
