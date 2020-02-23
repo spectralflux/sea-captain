@@ -23,6 +23,6 @@ export default {
   },
 
   update: function () {
-    this.scene.start('play');
+    this.scene.start('train');
   }
 };
