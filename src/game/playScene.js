@@ -41,7 +41,8 @@ function resetPlayField() {
 
 function addRock(rockGroup, boatSpeed) {
     let initX = Phaser.Math.Between(16, 800 - 16);
-    rockGroup.create(initX, 0, 'bigrock').setVelocity(0, boatSpeed);
+    let rock = Phaser.Math.RND.pick(['bigrock', 'smallrock'])
+    rockGroup.create(initX, 0, rock).setVelocity(0, boatSpeed);
 }
 
 function hitRock() {

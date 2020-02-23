@@ -10,6 +10,7 @@ export default {
 
     this.load.image('boat', require('../assets/boat.png'));
     this.load.image('bigrock', require('../assets/bigrock.png'));
+    this.load.image('smallrock', require('../assets/smallrock.png'));
 
     this.load.on('progress', function (progress) {
       bar.setScale(progress, 1);
