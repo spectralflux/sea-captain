@@ -2,7 +2,7 @@ import * as tf from '@tensorflow/tfjs';
 import * as mobilenet from '@tensorflow-models/mobilenet';
 import * as knnClassifier from '@tensorflow-models/knn-classifier';
 
-const CLASSES = ['Port', 'Starboard'];
+const CLASSES = ['port', 'starboard'];
 
 var net;
 var classifier;
@@ -68,10 +68,7 @@ export default {
                 // Get the most likely class and confidences from the classifier module.
                 const result = await classifier.predictClass(activation);
 
-                currentPredictionText =  `
-                    prediction: ${CLASSES[result.label]}\n
-                    probability: ${result.confidences[result.label]}
-                `;
+                currentPredictionText = `The sailors are ${result.confidences[result.label] * 100}% sure that you are signaling ${CLASSES[result.label]}!`;
           
                 // Dispose the tensor to release the memory.
                 img.dispose();

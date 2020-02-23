@@ -26,16 +26,16 @@ export default {
         starboardGraphics = this.add.graphics({ lineStyle: { width: 2, color: 0xFFF1E8 }, fillStyle: { color: 0x1D2B53 } });
         doneGraphics = this.add.graphics({ lineStyle: { width: 2, color: 0xFFF1E8 }, fillStyle: { color: 0x1D2B53 } });
 
-        trainText = this.add.text(250, 300, `Train Your Boat!`, {
+        trainText = this.add.text(30, 240, 'Captain! The sailors need to know \n your commands for port and starboard!', {
             fontSize: '32px',
             fill: '#FFF1E8'
         });
 
         this.cameras.main.setBackgroundColor(0x29ADFF);
 
-        portButton = new Phaser.Geom.Rectangle(250, 340, 170, 20);
-        starboardButton = new Phaser.Geom.Rectangle(250, 380, 170, 20);
-        doneButton = new Phaser.Geom.Rectangle(250, 420, 170, 20);
+        portButton = new Phaser.Geom.Rectangle(270, 340, 200, 20);
+        starboardButton = new Phaser.Geom.Rectangle(270, 380, 200, 20);
+        doneButton = new Phaser.Geom.Rectangle(270, 420, 200, 20);
 
         portGraphics.fillRectShape(portButton);
         starboardGraphics.fillRectShape(starboardButton);
@@ -45,23 +45,23 @@ export default {
         starboardGraphics.strokeRectShape(starboardButton);
         doneGraphics.strokeRectShape(doneButton);
 
-        portButtonText = this.add.text(260, 344, 'Add Port Example', {
+        portButtonText = this.add.text(280, 344, 'Add Port Example', {
             fontSize: '12px',
             fill: '#FFF1E8'
         });
 
-        starboardButtonText = this.add.text(260, 384, 'Add Starboard Example', {
+        starboardButtonText = this.add.text(280, 384, 'Add Starboard Example', {
             fontSize: '12px',
             fill: '#FFF1E8'
         });
 
-        doneButtonText = this.add.text(260, 424, 'Done Training!', {
+        doneButtonText = this.add.text(280, 424, 'Enough! Full speed ahead!', {
             fontSize: '12px',
             fill: '#FFF1E8'
         });
 
         predictionText = this.add.text(10, 10, '', {
-            fontSize: '24px',
+            fontSize: '16px',
             fill: '#FFF1E8'
         });
 
