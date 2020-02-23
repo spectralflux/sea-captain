@@ -102,7 +102,7 @@ export default {
             loop: true
         });
 
-        let predictionTimerEvent = this.time.addEvent({
+        this.time.addEvent({
             delay: 100,
             callback: makeSteeringPrediction,
             args: [boat],
