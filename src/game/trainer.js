@@ -79,12 +79,10 @@ export default {
     },
 
     getPrediction: async function() {
-        console.log("attempting prediction...");
         if (webcam !== 'undefined' && webcam !== null) {
             const img = await webcam.capture();
             const activation = net.infer(img, 'conv_preds');
-            var prediction = classifier.predictClass(activation);
-            console.log(prediction);
+            let prediction = classifier.predictClass(activation);
             return prediction;
         }
     },

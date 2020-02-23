@@ -3,6 +3,8 @@ import trainer from './trainer';
 
 const BOAT_HEALTH_TEXT = 'Boats Remaining:';
 const SCORE_TEXT = 'Score:';
+const MOVE_PORT = -20;
+const MOVE_STARBOARD = 20;
 
 let isGameOver;
 let score;
@@ -13,6 +15,17 @@ let healthText;
 let scoreText;
 let rockTimerEvent;
 let rockGroup;
+
+function makeSteeringPrediction(boat) {
+    // make model prediction from webcam, then adjust steering accordingly.
+    trainer.getPrediction().then(function (prediction) {
+        if (prediction.label === "0") {
+            boat.setVelocityX(MOVE_PORT);
+        } else if (prediction.label === "1") {
+            boat.setVelocityX(MOVE_STARBOARD);
+        }
+    });
+}
 
 function getHealthText(boatHealth) {
     return `${BOAT_HEALTH_TEXT} ${boatHealth}`;
@@ -87,6 +100,14 @@ export default {
             callbackScope: null,
             loop: true
         });
+
+        let predictionTimerEvent = this.time.addEvent({
+            delay: 100,
+            callback: makeSteeringPrediction,
+            args: [boat],
+            callbackScope: null,
+            loop: true
+        });
     },
 
     update: function () {
@@ -105,14 +126,6 @@ export default {
             // if (score % 10) {
             //     rockTimerEvent.delay = rockTimerEvent.delay - 100;
             // }
-        });
-
-        trainer.getPrediction().then(function (prediction) {
-            if (prediction.label === "0") {
-                boat.setVelocityX(-20);
-            } else if (prediction.label === "1") {
-                boat.setVelocityX(20);
-            }
         });
     }
 };
