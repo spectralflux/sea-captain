@@ -10,9 +10,16 @@ export default {
             fill: '#FFF1E8'
         });
 
+        this.add.text(310, 300, "Click to restart", {
+            fontSize: '16px',
+            fill: '#FFF1E8'
+        });
+
     },
 
     update: function () {
-
+        this.input.on('pointerup', function () {
+            this.scene.start('play');
+        }, this);
     }
 };

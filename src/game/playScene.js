@@ -15,24 +15,27 @@ let boatHealth;
 let boatSpeed;
 let healthText;
 let scoreText;
-let rockTimerEvent;
 let rockGroup;
+let sailorGroup;
 let topGraphics;
 let topBar;
 let boatAngle;
 let isBoatSpinning;
 let totalBoatSpin;
+let wakes;
 
 function makeSteeringPrediction(boat) {
     // make model prediction from webcam, then adjust steering accordingly.
     trainer.getPrediction().then(function (prediction) {
         if (prediction.label === "0") {
             boat.setVelocityX(MOVE_PORT);
+            wakes.forEach(wake => wake.setVelocityX(MOVE_PORT));
             if (!isBoatSpinning) {
                 boat.angle = -15.0;
             }
         } else if (prediction.label === "1") {
             boat.setVelocityX(MOVE_STARBOARD);
+            wakes.forEach(wake => wake.setVelocityX(MOVE_STARBOARD));
             if (!isBoatSpinning) {
                 boat.angle = 15.0;
             }
@@ -50,12 +53,18 @@ function getScoreText(score) {
 
 function resetPlayField() {
     rockGroup.clear(true, true);
+    sailorGroup.clear(true, true);
 }
 
 function addRock(rockGroup, boatSpeed) {
     let initX = Phaser.Math.Between(16, 800 - 16);
     let rock = Phaser.Math.RND.pick(['bigrock', 'smallrock'])
     rockGroup.create(initX, 0, rock).setVelocity(0, boatSpeed).setDepth(2);
+}
+
+function addSailor(sailorGroup, boatSpeed) {
+    let initX = Phaser.Math.Between(16, 800 - 16);
+    sailorGroup.create(initX, 0, 'sailor').setVelocity(0, boatSpeed).setDepth(2);
 }
 
 function hitRock() {
@@ -70,16 +79,27 @@ function hitRock() {
     });
 
     healthText.setText(getHealthText(boatHealth));
-    resetPlayField(rockGroup);
+    resetPlayField();
     if (boatHealth <= 0) {
         isGameOver = true;
     }
+}
+
+function rescueSailor(boat, sailor) {
+    score += 5;
+    console.log('rescued!');
+    console.log(sailor);
+    sailorGroup.remove(sailor);
+    sailor.destroy();
 }
 
 function increaseBoatSpeed() {
     boatSpeed = boatSpeed + BOAT_SPEED_INCREASE_INCREMENT;
     rockGroup.getChildren().forEach(rock => {
         rock.setVelocity(0, boatSpeed);
+    });
+    sailorGroup.getChildren().forEach(sailor => {
+        sailor.setVelocity(0, boatSpeed);
     });
 }
 
@@ -126,6 +146,11 @@ export default {
         boat = this.physics.add.sprite(400, 450, 'boat').setSize(16, 48).setDepth(3);
         boat.setCollideWorldBounds(true);
 
+        wakes = [
+            this.physics.add.sprite(boat.x-15, boat.y+40, 'wake').setDepth(3).setAlpha(0.5),
+            this.physics.add.sprite(boat.x+15, boat.y+40, 'wake').setDepth(3).setFlipX(true).setAlpha(0.5),
+        ];
+
         this.cameras.main.setBackgroundColor(0x29ADFF)
 
         healthText = this.add.text(16, 8, getHealthText(boatHealth), {
@@ -145,12 +170,25 @@ export default {
             collideWorldBounds: false
         });
 
-        this.physics.add.overlap(boat, rockGroup, hitRock, null, this);
+        sailorGroup = this.physics.add.group({
+            collideWorldBounds: false
+        });
 
-        rockTimerEvent = this.time.addEvent({
+        this.physics.add.overlap(boat, rockGroup, hitRock, null, this);
+        this.physics.add.overlap(boat, sailorGroup, rescueSailor, null, this);
+
+        this.time.addEvent({
             delay: 1200,
             callback: addRock,
             args: [rockGroup, boatSpeed],
+            callbackScope: null,
+            loop: true
+        });
+
+        this.time.addEvent({
+            delay: 1200,
+            callback: addSailor,
+            args: [sailorGroup, boatSpeed],
             callbackScope: null,
             loop: true
         });
@@ -180,15 +218,10 @@ export default {
             return;
         }
 
-        // remove rocks that have left the screen, and add to score
+        // remove rocks that have left the screen
         rockGroup.getChildren().filter(rock => rock.getTopCenter().y >= 600).forEach(rock => {
             rock.destroy();
-            score++;
             scoreText.setText(getScoreText(score));
-
-            // if (score % 10) {
-            //     rockTimerEvent.delay = rockTimerEvent.delay - 100;
-            // }
         });
     }
 };
