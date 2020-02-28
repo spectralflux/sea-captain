@@ -1,5 +1,11 @@
 # Sea Captain
 
+A simple game using tensorflow.js as controller input, which you train
+yourself. The game uses Phaser.js 3 to run.
+
+The model uses ImageNet with a K-means Nearest Neighbour shallow
+model on top to make a two class classifier.
+
 ## Dev environment
 This project has been developed with Parcel (https://parceljs.org/).
 
